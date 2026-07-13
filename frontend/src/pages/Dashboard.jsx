@@ -1,4 +1,5 @@
 import "../styles/dashboard.css";
+
 import Sidebar from "../components/Sidebar";
 import ChatWindow from "../components/ChatWindow";
 import Pipeline from "../components/Pipeline";
@@ -8,18 +9,23 @@ const Dashboard = () => {
   return (
     <div className="dashboard">
 
-      <div className="sidebar">
+      <aside className="sidebar">
         <Sidebar />
-      </div>
+      </aside>
 
-      <div className="chat">
+      <main className="mainContent">
         <ChatWindow />
-      </div>
+      </main>
 
-      <div className="rightPanel">
-        <Pipeline />
-        <EventLog />
-      </div>
+      <aside className="rightPanel">
+        <div className="pipelineContainer">
+          <Pipeline />
+        </div>
+
+        <div className="eventContainer">
+          <EventLog />
+        </div>
+      </aside>
 
     </div>
   );

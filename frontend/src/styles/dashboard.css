@@ -1,26 +1,563 @@
+/* ===========================
+   DYNAMO THEME
+=========================== */
+
 .dashboard{
     display:flex;
     height:100vh;
     width:100%;
+    background:#0F1117;
+    color:#F0F6FC;
 }
+
+/* LEFT */
 
 .sidebar{
-    width:260px;
-    border-right:1px solid #ddd;
+    width:270px;
+    background:#161B22;
+    border-right:1px solid #30363D;
 }
 
-.chat{
+/* CENTER */
+
+.mainContent{
     flex:1;
+    display:flex;
+    flex-direction:column;
+    background:#0F1117;
 }
+
+/* RIGHT */
 
 .rightPanel{
+
     width:360px;
-    border-left:1px solid #ddd;
+
+    background:#161B22;
+
+    border-left:1px solid #30363D;
 
     display:flex;
+
     flex-direction:column;
 }
 
-.rightPanel>*{
+.pipelineContainer{
+
     flex:1;
+
+    border-bottom:1px solid #30363D;
+}
+
+.eventContainer{
+
+    flex:1;
+}
+
+/* //SideBar//// */
+.sidebarContainer{
+
+    height:100%;
+
+    display:flex;
+
+    flex-direction:column;
+}
+
+.sidebarHeader{
+
+    padding:24px;
+
+    border-bottom:1px solid #30363D;
+}
+
+.sidebarHeader h2{
+
+    color:white;
+
+    font-size:24px;
+
+    font-weight:700;
+
+    margin-bottom:20px;
+}
+
+.newChatBtn{
+
+    width:100%;
+
+    padding:12px;
+
+    background:#21262D;
+
+    color:#F0F6FC;
+
+    border:1px solid #30363D;
+
+    border-radius:8px;
+
+    cursor:pointer;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    gap:10px;
+
+    transition:.2s;
+}
+
+.newChatBtn:hover{
+
+    background:#30363D;
+}
+
+.conversationList{
+
+    flex:1;
+
+    padding:18px;
+}
+
+.conversationItem{
+
+    padding:12px;
+
+    margin-bottom:10px;
+
+    border-radius:8px;
+
+    color:#C9D1D9;
+
+    cursor:pointer;
+
+    transition:.2s;
+}
+
+.conversationItem:hover{
+
+    background:#21262D;
+}
+
+.conversationItem.active{
+
+    background:#21262D;
+
+    border-left:3px solid #3B82F6;
+
+    color:white;
+}
+
+/* CHAT CSS */
+
+.chatContainer{
+
+    height:100%;
+
+    display:flex;
+
+    flex-direction:column;
+}
+
+.chatHeader{
+
+    height:72px;
+
+    display:flex;
+
+    align-items:center;
+
+    padding:0 30px;
+
+    border-bottom:1px solid #30363D;
+
+    background:#161B22;
+}
+
+.chatHeader h2{
+
+    font-size:22px;
+
+    color:white;
+}
+
+.chatMessages{
+
+    flex:1;
+
+    overflow-y:auto;
+
+    padding:35px;
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:20px;
+}
+
+/* USER */
+
+.userMessage{
+
+    align-self:flex-end;
+
+    max-width:65%;
+
+    background:#1C2128;
+
+    border:1px solid #30363D;
+
+    padding:16px;
+
+    border-radius:10px;
+}
+
+/* AI */
+
+.assistantMessage{
+
+    align-self:flex-start;
+
+    max-width:70%;
+
+    background:#161B22;
+
+    border:1px solid #30363D;
+
+    padding:16px;
+
+    border-radius:10px;
+}
+
+/* INPUT BOX  */
+
+.chatInputContainer{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:15px;
+
+    padding:20px;
+
+    border-top:1px solid #30363D;
+
+    background:#161B22;
+}
+
+.chatInputContainer input{
+
+    flex:1;
+
+    background:#0F1117;
+
+    color:white;
+
+    border:1px solid #30363D;
+
+    border-radius:8px;
+
+    padding:14px;
+
+    outline:none;
+}
+
+.chatInputContainer button{
+
+    width:46px;
+
+    height:46px;
+
+    background:#21262D;
+
+    color:white;
+
+    border:1px solid #30363D;
+
+    border-radius:8px;
+
+    cursor:pointer;
+}
+
+.chatInputContainer button:hover{
+
+    background:#30363D;
+}
+
+
+/* ===========================
+PIPELINE
+=========================== */
+
+.pipeline{
+
+    height:100%;
+
+    padding:20px;
+
+    overflow-y:auto;
+
+}
+
+.pipelineHeader{
+
+    margin-bottom:25px;
+
+}
+
+.pipelineHeader h2{
+
+    font-size:20px;
+
+    color:white;
+
+}
+
+/* One Stage */
+
+.stageNode{
+
+    display:flex;
+
+    gap:18px;
+
+}
+
+/* Timeline */
+
+.timeline{
+
+    width:35px;
+
+    display:flex;
+
+    flex-direction:column;
+
+    align-items:center;
+
+}
+
+.circle{
+
+    width:34px;
+
+    height:34px;
+
+    border-radius:50%;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+}
+
+/* Completed */
+
+.circle.completed{
+
+    background:#22C55E;
+
+    color:white;
+
+}
+
+/* Running */
+
+.circle.running{
+
+    background:#3B82F6;
+
+    color:white;
+
+}
+
+/* Waiting */
+
+.circle.waiting{
+
+    background:#30363D;
+
+    color:#8B949E;
+
+}
+
+/* Vertical Line */
+
+.verticalLine{
+
+    width:2px;
+
+    flex:1;
+
+    background:#30363D;
+
+    margin-top:5px;
+
+    margin-bottom:5px;
+
+}
+
+/* Text */
+
+.stageContent{
+
+    padding-bottom:55px;
+
+}
+
+.stageContent h4{
+
+    color:white;
+
+    font-size:15px;
+
+    margin-bottom:4px;
+
+}
+
+.stageContent.running p{
+
+    color:#3B82F6;
+}
+
+.stageContent.completed p{
+
+    color:#22C55E;
+}
+
+
+/* ===================================
+STATUS ANIMATIONS
+=================================== */
+
+.circle.running{
+
+    animation:pulse 1.6s infinite;
+}
+
+@keyframes pulse{
+
+    0%{
+
+        box-shadow:0 0 0 0 rgba(59,130,246,.6);
+
+    }
+
+    70%{
+
+        box-shadow:0 0 0 12px rgba(59,130,246,0);
+
+    }
+
+    100%{
+
+        box-shadow:0 0 0 0 rgba(59,130,246,0);
+
+    }
+
+}
+
+/* Completed line */
+
+.verticalLine.completed{
+
+    background:#22C55E;
+}
+
+/* Running line */
+
+.verticalLine.running{
+
+    background:#3B82F6;
+}
+
+/* Waiting */
+
+.verticalLine.waiting{
+
+    background:#30363D;
+}
+
+
+/* ==========================
+EVENT LOG
+========================== */
+
+.eventLog{
+
+    height:100%;
+
+    display:flex;
+
+    flex-direction:column;
+
+}
+
+.eventHeader{
+
+    padding:20px;
+
+    border-bottom:1px solid #30363D;
+
+}
+
+.eventHeader h2{
+
+    color:white;
+
+    font-size:20px;
+}
+
+.eventBody{
+
+    flex:1;
+
+    overflow-y:auto;
+
+    padding:15px;
+
+}
+
+/* One Event */
+
+.eventItem{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:6px;
+
+    padding:14px 0;
+
+    border-bottom:1px solid #2B3137;
+
+}
+
+/* Timestamp */
+
+.eventTime{
+
+    font-size:12px;
+
+    color:#58A6FF;
+
+    font-family:monospace;
+
+}
+
+/* Event */
+
+.eventText{
+
+    color:#C9D1D9;
+
+    font-size:14px;
+
 }
