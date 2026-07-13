@@ -205,4 +205,4 @@ Frontend Dashboard Development
 
 ### Orchestration Dashboard
 
-![Dashboard](docs/images/dashboard.png)
+![Dashboard](docx/images/dashboard.png)
