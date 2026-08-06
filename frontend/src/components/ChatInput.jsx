@@ -1,20 +1,54 @@
+import { useState } from "react";
 import { Send } from "lucide-react";
 
-const ChatInput = () => {
-  return (
-    <div className="chatInputContainer">
+const ChatInput = ({ handleSendMessage }) => {
 
-      <input
-        type="text"
-        placeholder="Describe your task..."
-      />
+    const [input, setInput] = useState("");
 
-      <button>
-        <Send size={18}/>
-      </button>
+    const send = () => {
 
-    </div>
-  );
+        if (!input.trim()) return;
+
+        handleSendMessage(input);
+
+        setInput("");
+
+    };
+
+    return (
+
+        <div className="chatInputContainer">
+
+            <input
+
+                value={input}
+
+                onChange={(e)=>setInput(e.target.value)}
+
+                onKeyDown={(e)=>{
+
+                    if(e.key==="Enter"){
+
+                        send();
+
+                    }
+
+                }}
+
+                placeholder="Describe your goal..."
+
+            />
+
+            <button onClick={send}>
+
+                <Send size={18}/>
+
+            </button>
+
+        </div>
+
+    );
+
 };
 
 export default ChatInput;

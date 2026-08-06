@@ -1,31 +1,45 @@
 import { Plus } from "lucide-react";
 
-const Sidebar = () => {
+const Sidebar = ({
+    conversations,
+    selectedConversationId,
+    setSelectedConversationId,
+    handleNewConversation,
+}) => {
   return (
     <div className="sidebarContainer">
 
       <div className="sidebarHeader">
+
         <h2>DYNAMO</h2>
 
-        <button className="newChatBtn">
-          <Plus size={18}/>
+        <button
+    className="newChatBtn"
+    onClick={handleNewConversation}
+>
+          <Plus size={18} />
           New Conversation
         </button>
+
       </div>
 
       <div className="conversationList">
 
-        <div className="conversationItem active">
-          Compare AWS vs Azure
-        </div>
+        {conversations.map((conversation) => (
 
-        <div className="conversationItem">
-          Build AI Resume Analyzer
-        </div>
+          <div
+            key={conversation.id}
+            className={`conversationItem ${
+              selectedConversationId === conversation.id ? "active" : ""
+            }`}
+            onClick={() => setSelectedConversationId(conversation.id)}
+          >
 
-        <div className="conversationItem">
-          Market Research Agent
-        </div>
+            {conversation.title}
+
+          </div>
+
+        ))}
 
       </div>
 
