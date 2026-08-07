@@ -20,69 +20,91 @@ const Dashboard = () => {
 
 const [selectedConversationId, setSelectedConversationId] = useState(1);
 // const [input, setInput] = useState("");
-const selectedConversation = conversations.find(
-  (conversation) => conversation.id === selectedConversationId
-);
-const handleSendMessage = (message) => {
+const selectedConversation =
+    conversations.find(
+        c => c.id === selectedConversationId
+    ) || null;
 
-  if (message.trim() === "") return;
 
-  setConversations((prev) =>
-    prev.map((conversation) => {
 
-      if (conversation.id !== selectedConversationId)
-        return conversation;
+    const handleSendMessage = (message) => {
 
-      return {
+    if (!message.trim()) return;
 
-    ...conversation,
+    // NEW CHAT
+    if (selectedConversationId === null) {
 
-    title:
-      conversation.title === "New Conversation"
-        ? message.split(" ").slice(0, 5).join(" ")
-        : conversation.title,
+        const newConversation = {
 
-    messages: [
-
-        ...conversation.messages,
-
-        {
             id: crypto.randomUUID(),
-            sender: "user",
-            text: message,
-        },
 
-    ],
+            title: message.split(" ").slice(0,5).join(" "),
+
+            messages:[
+                {
+                    id: crypto.randomUUID(),
+                    sender:"user",
+                    text:message,
+                }
+            ],
+
+            pipeline:[],
+
+            eventLogs:[],
+
+        };
+
+        setConversations(prev=>[
+            newConversation,
+            ...prev,
+        ]);
+
+        setSelectedConversationId(newConversation.id);
+
+        return;
+
+    }
+
+    // EXISTING CHAT
+
+    setConversations(prev=>
+
+        prev.map(conversation=>{
+
+            if(conversation.id!==selectedConversationId)
+                return conversation;
+
+            return{
+
+                ...conversation,
+
+                messages:[
+                    ...conversation.messages,
+
+                    {
+                        id:crypto.randomUUID(),
+                        sender:"user",
+                        text:message,
+                    }
+                ]
+
+            };
+
+        })
+
+    );
 
 };
 
-    })
-  );
 
-};
 
-const handleNewConversation = () => {
 
-  const newConversation = {
 
-    id: crypto.randomUUID(),
 
-    title: "New Conversation",
 
-    messages: [],
+const handleStartNewChat = () => {
 
-    pipeline: [],
-
-    eventLogs: [],
-
-  };
-
-  setConversations((prev) => [
-    newConversation,
-    ...prev,
-  ]);
-
-  setSelectedConversationId(newConversation.id);
+    setSelectedConversationId(null);
 
 };
  
@@ -95,7 +117,7 @@ const handleNewConversation = () => {
     conversations={conversations}
     selectedConversationId={selectedConversationId}
     setSelectedConversationId={setSelectedConversationId}
-    handleNewConversation={handleNewConversation}
+    handleStartNewChat={handleStartNewChat}
 />
       </aside>
 
@@ -109,13 +131,14 @@ const handleNewConversation = () => {
       <aside className="rightPanel">
         <div className="pipelineContainer">
           <Pipeline
-    pipeline={selectedConversation.pipeline}
+        pipeline={selectedConversation?.pipeline || []}
+
 />
         </div>
 
         <div className="eventContainer">
           <EventLog
-    eventLogs={selectedConversation.eventLogs}
+  eventLogs={selectedConversation?.eventLogs || []}
 />
         </div>
       </aside>

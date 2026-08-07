@@ -4,8 +4,10 @@ const Sidebar = ({
     conversations,
     selectedConversationId,
     setSelectedConversationId,
-    handleNewConversation,
+    handleStartNewChat,
 }) => {
+
+  
   return (
     <div className="sidebarContainer">
 
@@ -15,8 +17,7 @@ const Sidebar = ({
 
         <button
     className="newChatBtn"
-    onClick={handleNewConversation}
->
+onClick={handleStartNewChat}>
           <Plus size={18} />
           New Conversation
         </button>
