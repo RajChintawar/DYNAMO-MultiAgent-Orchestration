@@ -1,38 +1,35 @@
 import { PIPELINE_STAGES } from "../utils/constants";
 import StageNode from "./StageNode";
 
-const Pipeline = () => {
+const Pipeline = ({ pipeline }) => {
 
-    return (
+  return (
+    <div className="pipeline">
 
-        <div className="pipeline">
+      <h2>Execution Pipeline</h2>
 
-            <div className="pipelineHeader">
+      {pipeline.length === 0 ? (
 
-                <h2>Execution Pipeline</h2>
-
-            </div>
-
-            {
-                PIPELINE_STAGES.map((stage,index)=>(
-
-                    <StageNode
-
-                        key={stage.id}
-
-                        stage={stage}
-
-                        isLast={index===PIPELINE_STAGES.length-1}
-
-                    />
-
-                ))
-            }
-
+        <div className="pipelineEmpty">
+          Pipeline will appear when execution begins.
         </div>
 
-    );
+      ) : (
 
+        pipeline.map((stage, index) => (
+
+          <StageNode
+            key={stage.id}
+            stage={stage}
+            isLast={index === pipeline.length - 1}
+          />
+
+        ))
+
+      )}
+
+    </div>
+  );
 };
 
 export default Pipeline;

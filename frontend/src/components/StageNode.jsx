@@ -9,10 +9,11 @@ const StageNode = ({ stage, isLast }) => {
             <div className="timeline">
 
                 <div className={`circle ${stage.status}`}>
-
-                    <Icon size={16}/>
-
-                </div>
+                {stage.status === "completed" && "✓"}
+                 {stage.status === "running" && "●"}
+                 {stage.status === "waiting" && "○"}
+            </div>
+    
 
                 {!isLast &&
                     <div className={`verticalLine ${stage.status}`}></div>

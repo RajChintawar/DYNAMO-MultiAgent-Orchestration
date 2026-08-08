@@ -13,7 +13,38 @@ const Dashboard = () => {
     title: "Welcome to DYNAMO",
     messages: [
     ],
-    pipeline: [],
+    pipeline: [
+  {
+    id: "supervisor",
+    title: "Supervisor",
+    subtitle: "Task received",
+    status: "completed",
+  },
+  {
+    id: "planner",
+    title: "Planner",
+    subtitle: "Execution plan created",
+    status: "completed",
+  },
+  {
+    id: "research",
+    title: "Research Agent",
+    subtitle: "Waiting to execute",
+    status: "waiting",
+  },
+  {
+    id: "evaluator",
+    title: "Evaluator",
+    subtitle: "Waiting for agent results",
+    status: "waiting",
+  },
+  {
+    id: "synthesizer",
+    title: "Synthesizer",
+    subtitle: "Waiting for final results",
+    status: "waiting",
+  },
+],
     eventLogs: [],
   },
 ]);
