@@ -602,6 +602,13 @@ EMPTY STATE
 
 }
 
+.eventEmpty {
+    padding: 20px;
+    text-align: center;
+    color: #8B949E;
+    font-size: 13px;
+}
+
 .exampleContainer{
 
     display:grid;
@@ -614,19 +621,22 @@ EMPTY STATE
 
 }
 
-.exampleCard{
+.exampleCard {
+    background: #161B22;
+    border: 1px solid #30363D;
+    padding: 20px;
+    border-radius: 12px;
+    cursor: pointer;
 
-    background:#161B22;
+    color: #C9D1D9;
+    font-size: 14px;
+    text-align: left;
 
-    border:1px solid #30363D;
+    display: flex;
+    align-items: center;
+    gap: 10px;
 
-    padding:20px;
-
-    border-radius:12px;
-
-    cursor:pointer;
-
-    transition:.2s;
+    font-family: inherit;
 }
 
 .exampleCard:hover{
@@ -636,3 +646,6 @@ EMPTY STATE
     border-color:#3B82F6;
 
 }
+
+
+

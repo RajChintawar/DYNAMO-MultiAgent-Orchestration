@@ -1,73 +1,66 @@
-const logs = [
+import { useEffect, useRef } from "react";
 
-    {
-        time:"14:32:11",
-        event:"Supervisor started"
-    },
+const EventLog = ({ eventLogs }) => {
 
-    {
-        time:"14:32:13",
-        event:"Goal classified as Research"
-    },
+  const eventBodyRef = useRef(null);
 
-    {
-        time:"14:32:18",
-        event:"Planner created 5 tasks"
-    },
+  useEffect(() => {
 
-    {
-        time:"14:32:24",
-        event:"Research Agent started"
-    }
+    const container = eventBodyRef.current;
 
-];
+    if (!container) return;
 
-const EventLog = () => {
+    container.scrollTop = container.scrollHeight;
 
-    return (
+  }, [eventLogs]);
 
-        <div className="eventLog">
+  return (
 
-            <div className="eventHeader">
+    <div className="eventLog">
 
-                <h2>Execution Log</h2>
+      <div className="eventHeader">
+        <h2>Execution Log</h2>
+      </div>
 
-            </div>
+      <div
+        className="eventBody"
+        ref={eventBodyRef}
+      >
 
-            <div className="eventBody">
+        {eventLogs.length === 0 ? (
 
-                {
+          <div className="eventEmpty">
+            Execution events will appear here.
+          </div>
 
-                    logs.map((log,index)=>(
+        ) : (
 
-                        <div
-                            className="eventItem"
-                            key={index}
-                        >
+          eventLogs.map((log) => (
 
-                            <span className="eventTime">
+            <div
+              className="eventItem"
+              key={log.id}
+            >
 
-                                {log.time}
+              <span className="eventTime">
+                {log.time}
+              </span>
 
-                            </span>
-
-                            <span className="eventText">
-
-                                {log.event}
-
-                            </span>
-
-                        </div>
-
-                    ))
-
-                }
+              <span className="eventText">
+                {log.event}
+              </span>
 
             </div>
 
-        </div>
+          ))
 
-    );
+        )}
+
+      </div>
+
+    </div>
+
+  );
 
 };
 

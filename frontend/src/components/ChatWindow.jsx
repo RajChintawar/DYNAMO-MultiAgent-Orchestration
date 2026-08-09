@@ -25,23 +25,39 @@ const ChatWindow = ({
 
       <div className="exampleContainer">
 
-        <div className="exampleCard">
-          Research a topic
-        </div>
+  <button
+    className="exampleCard"
+    onClick={() => handleSendMessage("Research a topic")}
+  >
+    <span>📚</span>
+    <span>Research a topic</span>
+  </button>
 
-        <div className="exampleCard">
-          Build a REST API
-        </div>
+  <button
+    className="exampleCard"
+    onClick={() => handleSendMessage("Build a REST API")}
+  >
+    <span>💻</span>
+    <span>Build a REST API</span>
+  </button>
 
-        <div className="exampleCard">
-          Analyze a PDF
-        </div>
+  <button
+    className="exampleCard"
+    onClick={() => handleSendMessage("Analyze a PDF")}
+  >
+    <span>📄</span>
+    <span>Analyze a PDF</span>
+  </button>
 
-        <div className="exampleCard">
-          Generate documentation
-        </div>
+  <button
+    className="exampleCard"
+    onClick={() => handleSendMessage("Generate documentation")}
+  >
+    <span>📝</span>
+    <span>Generate documentation</span>
+  </button>
 
-      </div>
+</div>
 
     </div>
 

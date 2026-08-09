@@ -16,7 +16,8 @@ const StageNode = ({ stage, isLast }) => {
     
 
                 {!isLast &&
-                    <div className={`verticalLine ${stage.status}`}></div>
+   <div className={`verticalLine ${stage.status}`}></div>
+
                 }
 
             </div>
