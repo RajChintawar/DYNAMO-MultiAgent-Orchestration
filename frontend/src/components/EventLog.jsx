@@ -1,21 +1,64 @@
 import { useEffect, useRef } from "react";
 
-const EventLog = ({ eventLogs }) => {
+const EventLog = ({
+  eventLogs,
+  conversationId,
+  isExecuting,
+}) => {
 
   const eventBodyRef = useRef(null);
+  const previousConversationId = useRef(conversationId);
+  const previousLogCount = useRef(eventLogs.length);
+
+  // -----------------------------------------
+  // CONVERSATION SWITCH
+  // -----------------------------------------
 
   useEffect(() => {
 
-    const container = eventBodyRef.current;
+    if (previousConversationId.current !== conversationId) {
 
-    if (!container) return;
+      // Wait until the new conversation's DOM
+      // has actually been rendered.
+      requestAnimationFrame(() => {
 
-    container.scrollTop = container.scrollHeight;
+        if (eventBodyRef.current) {
+          eventBodyRef.current.scrollTop = 0;
+        }
 
-  }, [eventLogs]);
+      });
+
+      previousConversationId.current = conversationId;
+      previousLogCount.current = eventLogs.length;
+
+      return;
+    }
+
+    // -----------------------------------------
+    // NEW EXECUTION EVENT
+    // -----------------------------------------
+
+    if (
+      isExecuting &&
+      eventLogs.length > previousLogCount.current
+    ) {
+
+      requestAnimationFrame(() => {
+
+        if (eventBodyRef.current) {
+          eventBodyRef.current.scrollTop =
+            eventBodyRef.current.scrollHeight;
+        }
+
+      });
+    }
+
+    previousLogCount.current = eventLogs.length;
+
+  }, [conversationId, eventLogs, isExecuting]);
+
 
   return (
-
     <div className="eventLog">
 
       <div className="eventHeader">
@@ -59,9 +102,7 @@ const EventLog = ({ eventLogs }) => {
       </div>
 
     </div>
-
   );
-
 };
 
 export default EventLog;
