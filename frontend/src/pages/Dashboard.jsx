@@ -372,9 +372,48 @@ const Dashboard = () => {
   // =========================================================
   // SEND MESSAGE
   // =========================================================
+const sendMessageToBackend = async (conversationId, message) => {
+  try {
+    const response = await fetch("http://127.0.0.1:8000/api/chat/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        conversation_id: String(conversationId),
+        message: message,
+      }),
+    });
 
-  const handleSendMessage = (message) => {
-    if (!message.trim()) return;
+    if (!response.ok) {
+      const errorData = await response.json();
+
+      console.error(
+        "BACKEND VALIDATION ERROR:",
+        JSON.stringify(errorData, null, 2)
+      );
+
+      return null;
+    }
+
+    const data = await response.json();
+
+    console.log("BACKEND RESPONSE:", data);
+
+    return data;
+
+  } catch (error) {
+    console.error("BACKEND CONNECTION ERROR:", error);
+    return null;
+  }
+};
+
+
+
+
+
+const handleSendMessage = async (message) => {
+      if (!message.trim()) return;
 
 
     // =======================================================
@@ -405,16 +444,23 @@ const Dashboard = () => {
         isExecuting: true,
       };
 
-      setConversations((prev) => [
-        newConversation,
-        ...prev,
-      ]);
+     setConversations((prev) => [
+  newConversation,
+  ...prev,
+]);
 
-      setSelectedConversationId(newConversation.id);
+setSelectedConversationId(newConversation.id);
 
-      startMockExecution(newConversation.id);
+const backendResponse = await sendMessageToBackend(
+  newConversation.id,
+  message
+);
 
-      return;
+if (backendResponse) {
+  startMockExecution(newConversation.id);
+}
+
+return;
     }
 
 
@@ -443,8 +489,14 @@ const Dashboard = () => {
       })
     );
 
-    startMockExecution(selectedConversationId);
-  };
+const backendResponse = await sendMessageToBackend(
+  selectedConversationId,
+  message
+);
+
+if (backendResponse) {
+  startMockExecution(selectedConversationId);
+}  };
 
 
   // =========================================================
