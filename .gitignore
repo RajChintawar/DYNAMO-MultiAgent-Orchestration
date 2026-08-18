@@ -24,3 +24,8 @@ dist-ssr
 *.sw?
 
 .env
+ 
+# Python / DB 
+backend/dynamo.db 
+__pycache__/ 
+*.pyc 
