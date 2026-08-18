@@ -8,13 +8,15 @@
 
 DYNAMO is an AI orchestration platform that enables multiple specialized AI agents to collaborate under the supervision of an intelligent orchestrator.
 
-Instead of functioning as a traditional chatbot, DYNAMO visualizes the complete execution lifecycle—from task planning to agent execution and final synthesis—in real time.
+Instead of functioning as a traditional chatbot, DYNAMO visualizes the complete execution lifecycle—from task planning to agent execution and final synthesis—through an interactive dashboard.
+
+The system is being developed using a modular architecture where the frontend, backend, AI orchestration layer, and database layer can be developed independently and integrated through clearly defined contracts.
 
 ---
 
 ## 🏗 Current Project Structure
 
-```
+```text
 DYNAMO
 │
 ├── frontend/
@@ -30,179 +32,617 @@ DYNAMO
 
 ---
 
-## 🖥 Frontend (Current Progress)
+# 🖥 Frontend
 
-### ✅ Completed
+The frontend provides the interactive DYNAMO dashboard through which users can submit tasks and monitor their execution.
+
+## ✅ Completed
 
 - React + Vite setup
-- Modular project architecture
+- Modular component architecture
 - Dashboard layout
-- Sidebar UI
-- Chat Interface
+- DYNAMO sidebar
+- Conversation management
+- New Conversation functionality
+- Conversation switching
+- Chat interface
+- Dynamic chat messages
+- Empty-state welcome screen
+- Clickable example prompts
 - Execution Pipeline UI
+- Dynamic pipeline state updates
 - Execution Log UI
-- GitHub Repository Setup
+- Dynamic execution events
+- Execution Timeline
+- Conversation state management
+- Mock execution workflow
+- Frontend → FastAPI backend integration
+- Backend response handling
 
-### 🚧 In Progress
+## 🚧 In Progress
 
-- React State Management
-- Dynamic Pipeline Updates
-- Conversation Management
-- Live Execution Logs
+- Real AI execution integration
+- Real execution events
+- Persistent conversation history
+- Backend-driven pipeline updates
 
-### 📌 Planned
+## 📌 Planned
 
-- Backend Integration
-- SSE/WebSocket Communication
+- SSE/WebSocket communication
 - Authentication
-- History Management
-- Settings Page
+- History management
+- Settings page
+- Final UI refinements
 
 ---
 
-## 🧠 AI Workflow (Planned)
+# ⚙️ Backend
 
+The DYNAMO backend is being developed using **Python and FastAPI**.
+
+The backend acts as the central integration layer between the frontend, AI orchestration system, and database.
+
+## ✅ Completed
+
+- FastAPI application setup
+- Modular backend architecture
+- CORS configuration
+- Health endpoint
+- Swagger/OpenAPI documentation
+- Chat API
+- Conversation API
+- Message handling
+- Execution API
+- Execution ID generation
+- Frontend → Backend communication
+- Temporary execution management
+- Backend service layer
+
+## 🚧 In Progress
+
+- AI Core integration
+- Database integration
+- Execution event system
+- Real execution lifecycle
+- Persistent data storage
+- Backend-driven pipeline updates
+
+---
+
+# 🔌 Backend API
+
+## Chat API
+
+```text
+POST /api/chat/
 ```
-User
 
-↓
+Used to submit a user message to the DYNAMO backend.
 
+### Request
+
+```json
+{
+  "conversation_id": "1",
+  "message": "Research AI orchestration"
+}
+```
+
+### Current Response
+
+```json
+{
+  "conversation_id": "1",
+  "execution_id": "7b34021f-9604-4aef-bd07-f955b4993342",
+  "message": "Message received by DYNAMO backend.",
+  "status": "accepted"
+}
+```
+
+---
+
+## Conversation API
+
+```text
+POST /api/conversations/
+GET  /api/conversations/
+GET  /api/conversations/{id}
+GET  /api/conversations/{id}/messages
+```
+
+These endpoints are responsible for conversation creation, retrieval, and message history.
+
+---
+
+## Execution API
+
+```text
+POST /api/executions/
+GET  /api/executions/{execution_id}
+```
+
+### Create Execution
+
+```json
+{
+  "conversation_id": "1"
+}
+```
+
+### Response
+
+```json
+{
+  "id": "e7c9b8c2-7f12-4a6e-9d31-123456789abc",
+  "conversation_id": "1",
+  "status": "pending",
+  "started_at": "2026-08-18T07:30:00Z",
+  "completed_at": null,
+  "final_response": null
+}
+```
+
+The execution API provides the foundation for tracking the lifecycle of a DYNAMO task.
+
+---
+
+## Health Check
+
+```text
+GET /health
+```
+
+Used to verify that the backend is running correctly.
+
+---
+
+## Swagger Documentation
+
+When the backend is running, the complete API documentation can be accessed at:
+
+```text
+http://127.0.0.1:8000/docs
+```
+
+---
+
+# 🧠 AI Workflow
+
+The planned DYNAMO orchestration workflow is:
+
+```text
+User Task
+    ↓
 Supervisor
-
-↓
-
+    ↓
 Planner
-
-↓
-
+    ↓
 Dynamic Agent Selection
-
-↓
-
+    ↓
 Agent Execution
-
-↓
-
+    ↓
 Evaluation
-
-↓
-
+    ↓
 Synthesizer
-
-↓
-
+    ↓
 Final Response
 ```
 
+The exact AI orchestration implementation and agent framework are currently being developed by the AI team.
+
 ---
 
-## 🎯 Key Features
+# 📊 Execution Monitoring
 
-- Dynamic Agent Orchestration
+One of the main goals of DYNAMO is to make the execution process visible to the user.
+
+The dashboard provides:
+
+```text
+Execution Pipeline
+        +
+Execution Log
+        +
+Execution Timeline
+```
+
+Example:
+
+```text
+Supervisor
+    ↓
+Planner
+    ↓
+Research Agent
+    ↓
+Evaluator
+    ↓
+Synthesizer
+```
+
+The current frontend demonstrates the execution lifecycle using a mock execution system.
+
+The mock execution will eventually be replaced by real execution events generated by the AI orchestration layer.
+
+---
+
+# 🎯 Key Features
+
+- Dynamic Multi-Agent Orchestration
 - Intelligent Task Planning
-- Live Execution Timeline
-- Real-Time Event Logs
+- Conversation Management
+- Interactive Chat Interface
+- Execution Pipeline Visualization
+- Execution Timeline
+- Execution Logs
 - Multi-Agent Collaboration
-- Interactive Dashboard
-- Backend Event Streaming
+- Dynamic Agent Selection
+- FastAPI Backend
+- Execution Tracking
 - Extensible Agent Architecture
+- Frontend ↔ Backend Integration
+- Modular System Architecture
 
 ---
 
-## 🛠 Tech Stack
+# 🏗 System Architecture
 
-### Frontend
+```text
+                         DYNAMO
+                            │
+                            ▼
+                 ┌────────────────────┐
+                 │   React Frontend   │
+                 │                    │
+                 │ Chat               │
+                 │ Conversations      │
+                 │ Pipeline            │
+                 │ Execution Log       │
+                 └─────────┬──────────┘
+                           │
+                        HTTP API
+                           │
+                           ▼
+                 ┌────────────────────┐
+                 │  FastAPI Backend   │
+                 │                    │
+                 │ Chat API           │
+                 │ Conversation API   │
+                 │ Execution API      │
+                 │ Service Layer      │
+                 └─────────┬──────────┘
+                           │
+                  ┌────────┴────────┐
+                  │                 │
+                  ▼                 ▼
+          ┌───────────────┐  ┌───────────────┐
+          │    AI Core    │  │   Database    │
+          │               │  │               │
+          │ Agents        │  │ Conversations │
+          │ Orchestrator  │  │ Messages      │
+          │ Planning      │  │ Executions    │
+          │ Evaluation    │  │ Events        │
+          └───────────────┘  └───────────────┘
+```
+
+---
+
+# 🤝 Team Responsibilities
+
+## Frontend & Backend
+
+Responsible for:
+
+- React dashboard
+- Chat interface
+- Conversation management
+- Execution Pipeline
+- Execution Log
+- FastAPI backend
+- API development
+- Backend integration layer
+
+## AI Agent & Orchestration Team
+
+Responsible for:
+
+- Supervisor
+- Planner
+- Agent selection
+- Agent execution
+- Evaluation
+- Synthesizer
+- AI orchestration
+- Agent execution events
+
+## Database Team
+
+Responsible for:
+
+- Database architecture
+- Conversation persistence
+- Message persistence
+- Execution persistence
+- Execution event persistence
+- Database schema
+- Data relationships
+
+---
+
+# 🔗 Integration Contracts
+
+The frontend, backend, AI Core, and database are being developed as separate components.
+
+Before final integration, the following contracts are being coordinated between the teams.
+
+## AI Core Contract
+
+The AI team will define:
+
+- Backend → AI input format
+- AI → Backend response format
+- Agent execution event format
+- Agent and stage status values
+- Error handling
+- Execution lifecycle
+- Communication mechanism
+- Long-running execution strategy
+
+## Database Contract
+
+The database team will define:
+
+- Conversation schema
+- Message schema
+- Execution schema
+- Execution-event schema
+- Primary keys
+- Foreign keys
+- ID generation strategy
+- Status values
+- Timestamp strategy
+- Required indexes
+
+The final backend implementation will be aligned with these contracts before full system integration.
+
+---
+
+# 🛠 Tech Stack
+
+## Frontend
 
 - React
 - Vite
-- React Router
-- Axios
+- JavaScript
+- CSS
 - Lucide React
 
-### Backend (Planned)
-
-- Node.js
-- Express.js
-- MongoDB
-
-### AI Layer (Planned)
+## Backend
 
 - Python
-- LangGraph / CrewAI (Final selection pending)
-- OpenAI APIs
 - FastAPI
+- Pydantic
+- Uvicorn
+
+## AI Layer
+
+- Python
+- AI Agent Orchestration Framework
+- LLM APIs
+- Framework selection in progress
+
+## Database
+
+- Database technology
+- Final schema currently being developed
 
 ---
 
-## 📅 Development Progress
+# 🚀 Backend Setup
 
-### Phase 1 ✅
+Navigate to the backend directory:
+
+```bash
+cd backend
+```
+
+Create a virtual environment:
+
+```bash
+python -m venv venv
+```
+
+Activate the virtual environment on Windows PowerShell:
+
+```powershell
+.\venv\Scripts\Activate.ps1
+```
+
+Install dependencies:
+
+```bash
+pip install -r requirements.txt
+```
+
+Start the backend:
+
+```bash
+uvicorn app.main:app --reload
+```
+
+The backend will run at:
+
+```text
+http://127.0.0.1:8000
+```
+
+Swagger documentation:
+
+```text
+http://127.0.0.1:8000/docs
+```
+
+Health check:
+
+```text
+http://127.0.0.1:8000/health
+```
+
+> The virtual environment and environment variables are excluded from Git using `.gitignore`.
+
+---
+
+# 📅 Development Progress
+
+## Phase 1 — Project Foundation ✅
 
 - Project Setup
 - GitHub Repository
-- React Architecture
-- Dashboard Layout
+- Frontend Architecture
+- Backend Architecture
+- Team Responsibility Separation
 
-### Phase 2 🚧
+## Phase 2 — Frontend Dashboard ✅
 
-- Interactive UI
-- State Management
-- Event System
+- Dashboard UI
+- Sidebar
+- Chat Interface
+- Conversation Management
+- Example Prompts
+- Execution Pipeline
+- Execution Log
+- Execution Timeline
+- Dynamic Frontend State
+- Mock Execution System
 
-### Phase 3
+## Phase 3 — Backend Foundation ✅
 
-- Backend APIs
-- Database
-- Authentication
+- FastAPI Setup
+- CORS
+- Swagger/OpenAPI
+- Chat API
+- Conversation API
+- Message Handling
+- Execution API
+- Execution ID Generation
+- Frontend ↔ Backend Integration
 
-### Phase 4
+## Phase 4 — AI & Database Integration 🚧
 
+- AI Core Contract
+- Database Contract
 - AI Agent Integration
-- Orchestration Engine
-- Live Monitoring
+- Database Integration
+- Execution Event System
+- Real Execution Pipeline
+- Real-Time Event Updates
+- Persistent Storage
+- Final Response Integration
 
-### Phase 5
+## Phase 5 — Finalization
 
+- Authentication
 - Testing
-- Optimization
+- Error Handling
+- Performance Optimization
 - Deployment
+- Documentation
 
 ---
 
-## 👥 Team
+# 🎥 Demo
 
-Frontend Developer
+## DYNAMO Working Demonstration
 
-- Raj Chintawar
+The demonstration showcases the current DYNAMO dashboard and working frontend/backend integration.
 
-Backend Developer
+It includes:
 
-- TBD
+- DYNAMO Dashboard
+- Conversation Management
+- Chat Interface
+- Example Prompts
+- Execution Pipeline
+- Execution Log
+- Execution Timeline
+- Backend API Communication
 
-AI Agent Team
+### ▶️ Demo Video
 
-- TBD
+Add the GitHub-hosted video path or URL here:
+
+```text
+YOUR_GITHUB_VIDEO_PATH_OR_URL
+```
+
+Example:
+
+```md
+[▶️ Watch DYNAMO Demo](docs/vid/Dynamo Scree Recording.mp4)
+```
 
 ---
 
-## 📌 Status
+# 📌 Current Status
 
-Current Version
+### Current Version
 
+```text
+v0.2.0
 ```
-v0.1.0
+
+### Current Focus
+
+```text
+AI Core + Database Integration
 ```
 
-Current Focus
+### Development Status
 
-```
-Frontend Dashboard Development
+```text
+Frontend                    ✅
+Backend Foundation          ✅
+Chat API                    ✅
+Conversation API            ✅
+Execution API               ✅
+Frontend ↔ Backend          ✅
+
+AI Agent Integration        🚧
+Database Integration        🚧
+Execution Events            🚧
+Persistent Storage          🚧
+Real-Time Pipeline          🚧
+Final End-to-End System     🚧
 ```
 
 ---
 
-## 📷 Dashboard Preview
+# 🔮 Upcoming
 
-### Orchestration Dashboard
+```text
+AI Core Integration
+        ↓
+Database Integration
+        ↓
+Execution Event System
+        ↓
+Real-Time Pipeline Updates
+        ↓
+Final Response Integration
+        ↓
+Authentication
+        ↓
+Testing
+        ↓
+Deployment
+```
 
-![Dashboard](docx/images/dashboard.png)
+---
+
+## 📄 Project Status
+
+DYNAMO is currently under active development as a Final Year Project.
+
+The frontend dashboard and initial FastAPI backend are operational, including frontend-to-backend communication, conversation handling, chat APIs, and execution APIs.
+
+The AI orchestration and database components are currently being developed independently and will be integrated with the backend once the respective technical contracts and schemas are finalized.
