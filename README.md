@@ -567,18 +567,7 @@ It includes:
 - Execution Timeline
 - Backend API Communication
 
-### ▶️ Demo Video
 
-Add the GitHub-hosted video path or URL here:
-
-```text
-YOUR_GITHUB_VIDEO_PATH_OR_URL
-```
-
-Example:
-
-```md
-[▶️ Watch DYNAMO Demo](docs/vid/Dynamo Scree Recording.mp4)
 ```
 
 ---
