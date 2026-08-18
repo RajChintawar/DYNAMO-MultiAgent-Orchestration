@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+from app.db.database import init_db
 from app.api.routes.chat import router as chat_router
 from app.api.routes.conversations import router as conversation_router
 from app.api.routes.executions import router as execution_router
@@ -11,6 +12,11 @@ app = FastAPI(
     description="Backend API for the DYNAMO Multi-Agent Orchestration System",
     version="1.0.0",
 )
+
+
+@app.on_event("startup")
+def on_startup():
+    init_db()
 
 
 # CORS

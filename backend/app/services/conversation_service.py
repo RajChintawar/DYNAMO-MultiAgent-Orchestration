@@ -1,60 +1,41 @@
-import uuid
+from sqlalchemy.orm import Session
 
-from app.schemas.conversation import (
-    ConversationCreate,
-    ConversationResponse,
-)
+from app.db.models import Conversation, Message
+from app.schemas.conversation import ConversationCreate
 
 
-conversations = []
-messages = []
-
-
-def add_message(
-    conversation_id: str,
-    sender: str,
-    text: str,
-):
-
-    message = {
-        "id": str(uuid.uuid4()),
-        "conversation_id": conversation_id,
-        "sender": sender,
-        "text": text,
-    }
-
-    messages.append(message)
-
+def add_message(db: Session, conversation_id: str, sender: str, text: str) -> Message:
+    message = Message(
+        conversation_id=conversation_id,
+        sender=sender,
+        text=text,
+    )
+    db.add(message)
+    db.commit()
+    db.refresh(message)
     return message
 
 
-
-def create_conversation(
-    data: ConversationCreate,
-) -> ConversationResponse:
-
-    conversation = ConversationResponse(
-        id=str(uuid.uuid4()),
-        title=data.title,
+def get_messages(db: Session, conversation_id: str) -> list[Message]:
+    return (
+        db.query(Message)
+        .filter(Message.conversation_id == conversation_id)
+        .order_by(Message.pk)
+        .all()
     )
 
-    conversations.append(conversation)
 
+def create_conversation(db: Session, data: ConversationCreate) -> Conversation:
+    conversation = Conversation(title=data.title)
+    db.add(conversation)
+    db.commit()
+    db.refresh(conversation)
     return conversation
 
 
-def get_conversations() -> list[ConversationResponse]:
+def get_conversations(db: Session) -> list[Conversation]:
+    return db.query(Conversation).order_by(Conversation.pk).all()
 
-    return conversations
 
-
-def get_conversation(
-    conversation_id: str,
-) -> ConversationResponse | None:
-
-    for conversation in conversations:
-
-        if conversation.id == conversation_id:
-            return conversation
-
-    return None
+def get_conversation(db: Session, conversation_id: str) -> Conversation | None:
+    return db.query(Conversation).filter(Conversation.id == conversation_id).first()
