@@ -34,3 +34,13 @@ __pycache__/
 # SQLite database
 backend/dynamo.db
 backend/*.db
+
+
+
+
+__pycache__/
+*.py[cod]
+.env
+**/.env
+**/venv/
+*.db
