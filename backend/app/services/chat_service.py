@@ -123,7 +123,10 @@ async def run_execution_background(
             final_response=report,
         )
 
+    
     except Exception as exc:
+        db.rollback()
+
         try:
             update_execution_status(
                 db,
@@ -131,6 +134,7 @@ async def run_execution_background(
                 "failed",
                 final_response=f"AI execution failed: {exc}",
             )
+
             add_execution_event(
                 db,
                 ExecutionEventCreate(
@@ -140,8 +144,13 @@ async def run_execution_background(
                     status="failed",
                 ),
             )
-        except Exception:
+        except Exception as db_exc:
             db.rollback()
+            print(
+                f"Failed to record execution failure "
+                f"for {execution_id}: {db_exc}"
+            )
+
 
     finally:
         db.close()

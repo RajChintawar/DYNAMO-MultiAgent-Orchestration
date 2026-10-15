@@ -5,7 +5,12 @@ import Sidebar from "../components/Sidebar";
 import ChatWindow from "../components/ChatWindow";
 import Pipeline from "../components/Pipeline";
 import EventLog from "../components/EventLog";
-
+import {
+  createConversation,
+  sendChatMessage,
+  getExecutionStatus,
+  getExecutionEvents,
+} from "../services/api";
 const Dashboard = () => {
   const [conversations, setConversations] = useState([
     {
@@ -69,8 +74,7 @@ const Dashboard = () => {
     },
   ]);
 
-  const [selectedConversationId, setSelectedConversationId] = useState(1);
-
+const [selectedConversationId, setSelectedConversationId] = useState(null);
   const selectedConversation =
     conversations.find(
       (conversation) => conversation.id === selectedConversationId
@@ -81,292 +85,292 @@ const Dashboard = () => {
   // MOCK EXECUTION
   // =========================================================
 
-  const startMockExecution = (conversationId) => {
-    const stages = [
-      {
-        id: "supervisor",
-        title: "Supervisor",
-        subtitle: "Processing task",
-        status: "running",
-      },
-      {
-        id: "planner",
-        title: "Planner",
-        subtitle: "Waiting to execute",
-        status: "waiting",
-      },
-      {
-        id: "research",
-        title: "Research Agent",
-        subtitle: "Waiting to execute",
-        status: "waiting",
-      },
-      {
-        id: "evaluator",
-        title: "Evaluator",
-        subtitle: "Waiting to execute",
-        status: "waiting",
-      },
-      {
-        id: "synthesizer",
-        title: "Synthesizer",
-        subtitle: "Waiting to execute",
-        status: "waiting",
-      },
-    ];
+  // const startMockExecution = (conversationId) => {
+  //   const stages = [
+  //     {
+  //       id: "supervisor",
+  //       title: "Supervisor",
+  //       subtitle: "Processing task",
+  //       status: "running",
+  //     },
+  //     {
+  //       id: "planner",
+  //       title: "Planner",
+  //       subtitle: "Waiting to execute",
+  //       status: "waiting",
+  //     },
+  //     {
+  //       id: "research",
+  //       title: "Research Agent",
+  //       subtitle: "Waiting to execute",
+  //       status: "waiting",
+  //     },
+  //     {
+  //       id: "evaluator",
+  //       title: "Evaluator",
+  //       subtitle: "Waiting to execute",
+  //       status: "waiting",
+  //     },
+  //     {
+  //       id: "synthesizer",
+  //       title: "Synthesizer",
+  //       subtitle: "Waiting to execute",
+  //       status: "waiting",
+  //     },
+  //   ];
 
-    // One execution start time.
-    // All event timestamps are calculated from this.
-    const executionStart = Date.now();
+  //   // One execution start time.
+  //   // All event timestamps are calculated from this.
+  //   const executionStart = Date.now();
 
-    const createEvent = (event, offset) => ({
-      id: crypto.randomUUID(),
-      time: new Date(executionStart + offset).toLocaleTimeString(),
-      event,
-    });
-
-
-    // =========================================================
-    // START EXECUTION
-    // =========================================================
-
-    setConversations((prev) =>
-      prev.map((conversation) =>
-        conversation.id === conversationId
-          ? {
-              ...conversation,
-
-              isExecuting: true,
-
-              pipeline: stages,
-
-              eventLogs: [
-                createEvent("Supervisor started", 0),
-              ],
-            }
-          : conversation
-      )
-    );
+  //   const createEvent = (event, offset) => ({
+  //     id: crypto.randomUUID(),
+  //     time: new Date(executionStart + offset).toLocaleTimeString(),
+  //     event,
+  //   });
 
 
-    // =========================================================
-    // SUPERVISOR → PLANNER
-    // =========================================================
+  //   // =========================================================
+  //   // START EXECUTION
+  //   // =========================================================
 
-    setTimeout(() => {
-      setConversations((prev) =>
-        prev.map((conversation) => {
-          if (conversation.id !== conversationId)
-            return conversation;
+  //   setConversations((prev) =>
+  //     prev.map((conversation) =>
+  //       conversation.id === conversationId
+  //         ? {
+  //             ...conversation,
 
-          return {
-            ...conversation,
+  //             isExecuting: true,
 
-            pipeline: conversation.pipeline.map((stage) => {
-              if (stage.id === "supervisor") {
-                return {
-                  ...stage,
-                  subtitle: "Task analyzed",
-                  status: "completed",
-                };
-              }
+  //             pipeline: stages,
 
-              if (stage.id === "planner") {
-                return {
-                  ...stage,
-                  subtitle: "Creating execution plan",
-                  status: "running",
-                };
-              }
-
-              return stage;
-            }),
-
-            eventLogs: [
-              ...conversation.eventLogs,
-
-              createEvent("Supervisor completed", 1500),
-              createEvent("Planner started", 1500),
-            ],
-          };
-        })
-      );
-    }, 1500);
+  //             eventLogs: [
+  //               createEvent("Supervisor started", 0),
+  //             ],
+  //           }
+  //         : conversation
+  //     )
+  //   );
 
 
-    // =========================================================
-    // PLANNER → RESEARCH
-    // =========================================================
+  //   // =========================================================
+  //   // SUPERVISOR → PLANNER
+  //   // =========================================================
 
-    setTimeout(() => {
-      setConversations((prev) =>
-        prev.map((conversation) => {
-          if (conversation.id !== conversationId)
-            return conversation;
+  //   setTimeout(() => {
+  //     setConversations((prev) =>
+  //       prev.map((conversation) => {
+  //         if (conversation.id !== conversationId)
+  //           return conversation;
 
-          return {
-            ...conversation,
+  //         return {
+  //           ...conversation,
 
-            pipeline: conversation.pipeline.map((stage) => {
-              if (stage.id === "planner") {
-                return {
-                  ...stage,
-                  subtitle: "Execution plan created",
-                  status: "completed",
-                };
-              }
+  //           pipeline: conversation.pipeline.map((stage) => {
+  //             if (stage.id === "supervisor") {
+  //               return {
+  //                 ...stage,
+  //                 subtitle: "Task analyzed",
+  //                 status: "completed",
+  //               };
+  //             }
 
-              if (stage.id === "research") {
-                return {
-                  ...stage,
-                  subtitle: "Searching relevant sources",
-                  status: "running",
-                };
-              }
+  //             if (stage.id === "planner") {
+  //               return {
+  //                 ...stage,
+  //                 subtitle: "Creating execution plan",
+  //                 status: "running",
+  //               };
+  //             }
 
-              return stage;
-            }),
+  //             return stage;
+  //           }),
 
-            eventLogs: [
-              ...conversation.eventLogs,
+  //           eventLogs: [
+  //             ...conversation.eventLogs,
 
-              createEvent("Planner completed", 3000),
-              createEvent("Research Agent started", 3000),
-            ],
-          };
-        })
-      );
-    }, 3000);
-
-
-    // =========================================================
-    // RESEARCH → EVALUATOR
-    // =========================================================
-
-    setTimeout(() => {
-      setConversations((prev) =>
-        prev.map((conversation) => {
-          if (conversation.id !== conversationId)
-            return conversation;
-
-          return {
-            ...conversation,
-
-            pipeline: conversation.pipeline.map((stage) => {
-              if (stage.id === "research") {
-                return {
-                  ...stage,
-                  subtitle: "Research completed",
-                  status: "completed",
-                };
-              }
-
-              if (stage.id === "evaluator") {
-                return {
-                  ...stage,
-                  subtitle: "Evaluating results",
-                  status: "running",
-                };
-              }
-
-              return stage;
-            }),
-
-            eventLogs: [
-              ...conversation.eventLogs,
-
-              createEvent("Research Agent completed", 5000),
-              createEvent("Evaluator started", 5000),
-            ],
-          };
-        })
-      );
-    }, 5000);
+  //             createEvent("Supervisor completed", 1500),
+  //             createEvent("Planner started", 1500),
+  //           ],
+  //         };
+  //       })
+  //     );
+  //   }, 1500);
 
 
-    // =========================================================
-    // EVALUATOR → SYNTHESIZER
-    // =========================================================
+  //   // =========================================================
+  //   // PLANNER → RESEARCH
+  //   // =========================================================
 
-    setTimeout(() => {
-      setConversations((prev) =>
-        prev.map((conversation) => {
-          if (conversation.id !== conversationId)
-            return conversation;
+  //   setTimeout(() => {
+  //     setConversations((prev) =>
+  //       prev.map((conversation) => {
+  //         if (conversation.id !== conversationId)
+  //           return conversation;
 
-          return {
-            ...conversation,
+  //         return {
+  //           ...conversation,
 
-            pipeline: conversation.pipeline.map((stage) => {
-              if (stage.id === "evaluator") {
-                return {
-                  ...stage,
-                  subtitle: "Evaluation completed",
-                  status: "completed",
-                };
-              }
+  //           pipeline: conversation.pipeline.map((stage) => {
+  //             if (stage.id === "planner") {
+  //               return {
+  //                 ...stage,
+  //                 subtitle: "Execution plan created",
+  //                 status: "completed",
+  //               };
+  //             }
 
-              if (stage.id === "synthesizer") {
-                return {
-                  ...stage,
-                  subtitle: "Generating final response",
-                  status: "running",
-                };
-              }
+  //             if (stage.id === "research") {
+  //               return {
+  //                 ...stage,
+  //                 subtitle: "Searching relevant sources",
+  //                 status: "running",
+  //               };
+  //             }
 
-              return stage;
-            }),
+  //             return stage;
+  //           }),
 
-            eventLogs: [
-              ...conversation.eventLogs,
+  //           eventLogs: [
+  //             ...conversation.eventLogs,
 
-              createEvent("Evaluator completed", 7000),
-              createEvent("Synthesizer started", 7000),
-            ],
-          };
-        })
-      );
-    }, 7000);
+  //             createEvent("Planner completed", 3000),
+  //             createEvent("Research Agent started", 3000),
+  //           ],
+  //         };
+  //       })
+  //     );
+  //   }, 3000);
 
 
-    // =========================================================
-    // EXECUTION COMPLETE
-    // =========================================================
+  //   // =========================================================
+  //   // RESEARCH → EVALUATOR
+  //   // =========================================================
 
-    setTimeout(() => {
-      setConversations((prev) =>
-        prev.map((conversation) => {
-          if (conversation.id !== conversationId)
-            return conversation;
+  //   setTimeout(() => {
+  //     setConversations((prev) =>
+  //       prev.map((conversation) => {
+  //         if (conversation.id !== conversationId)
+  //           return conversation;
 
-          return {
-            ...conversation,
+  //         return {
+  //           ...conversation,
 
-            isExecuting: false,
+  //           pipeline: conversation.pipeline.map((stage) => {
+  //             if (stage.id === "research") {
+  //               return {
+  //                 ...stage,
+  //                 subtitle: "Research completed",
+  //                 status: "completed",
+  //               };
+  //             }
 
-            pipeline: conversation.pipeline.map((stage) => {
-              if (stage.id === "synthesizer") {
-                return {
-                  ...stage,
-                  subtitle: "Final response ready",
-                  status: "completed",
-                };
-              }
+  //             if (stage.id === "evaluator") {
+  //               return {
+  //                 ...stage,
+  //                 subtitle: "Evaluating results",
+  //                 status: "running",
+  //               };
+  //             }
 
-              return stage;
-            }),
+  //             return stage;
+  //           }),
 
-            eventLogs: [
-              ...conversation.eventLogs,
+  //           eventLogs: [
+  //             ...conversation.eventLogs,
 
-              createEvent("Synthesizer completed", 9000),
-              createEvent("Execution completed", 9000),
-            ],
-          };
-        })
-      );
-    }, 9000);
-  };
+  //             createEvent("Research Agent completed", 5000),
+  //             createEvent("Evaluator started", 5000),
+  //           ],
+  //         };
+  //       })
+  //     );
+  //   }, 5000);
+
+
+  //   // =========================================================
+  //   // EVALUATOR → SYNTHESIZER
+  //   // =========================================================
+
+  //   setTimeout(() => {
+  //     setConversations((prev) =>
+  //       prev.map((conversation) => {
+  //         if (conversation.id !== conversationId)
+  //           return conversation;
+
+  //         return {
+  //           ...conversation,
+
+  //           pipeline: conversation.pipeline.map((stage) => {
+  //             if (stage.id === "evaluator") {
+  //               return {
+  //                 ...stage,
+  //                 subtitle: "Evaluation completed",
+  //                 status: "completed",
+  //               };
+  //             }
+
+  //             if (stage.id === "synthesizer") {
+  //               return {
+  //                 ...stage,
+  //                 subtitle: "Generating final response",
+  //                 status: "running",
+  //               };
+  //             }
+
+  //             return stage;
+  //           }),
+
+  //           eventLogs: [
+  //             ...conversation.eventLogs,
+
+  //             createEvent("Evaluator completed", 7000),
+  //             createEvent("Synthesizer started", 7000),
+  //           ],
+  //         };
+  //       })
+  //     );
+  //   }, 7000);
+
+
+  //   // =========================================================
+  //   // EXECUTION COMPLETE
+  //   // =========================================================
+
+  //   setTimeout(() => {
+  //     setConversations((prev) =>
+  //       prev.map((conversation) => {
+  //         if (conversation.id !== conversationId)
+  //           return conversation;
+
+  //         return {
+  //           ...conversation,
+
+  //           isExecuting: false,
+
+  //           pipeline: conversation.pipeline.map((stage) => {
+  //             if (stage.id === "synthesizer") {
+  //               return {
+  //                 ...stage,
+  //                 subtitle: "Final response ready",
+  //                 status: "completed",
+  //               };
+  //             }
+
+  //             return stage;
+  //           }),
+
+  //           eventLogs: [
+  //             ...conversation.eventLogs,
+
+  //             createEvent("Synthesizer completed", 9000),
+  //             createEvent("Execution completed", 9000),
+  //           ],
+  //         };
+  //       })
+  //     );
+  //   }, 9000);
+  // };
 
 
   // =========================================================
@@ -374,37 +378,141 @@ const Dashboard = () => {
   // =========================================================
 const sendMessageToBackend = async (conversationId, message) => {
   try {
-    const response = await fetch("http://127.0.0.1:8000/api/chat/", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        conversation_id: String(conversationId),
-        message: message,
-      }),
-    });
+    return await sendChatMessage(conversationId, message);
+  } catch (error) {
+    console.error("BACKEND ERROR:", error);
+    alert(error.message || "Failed to connect to DYNAMO backend.");
+    return null;
+  }
+};
 
-    if (!response.ok) {
-      const errorData = await response.json();
 
-      console.error(
-        "BACKEND VALIDATION ERROR:",
-        JSON.stringify(errorData, null, 2)
+const trackExecution = async (conversationId, executionId) => {
+  try {
+    setConversations((prev) =>
+      prev.map((conversation) =>
+        conversation.id === conversationId
+          ? { ...conversation, isExecuting: true }
+          : conversation
+      )
+    );
+
+    let execution;
+
+    // Poll the actual backend until it finishes.
+    while (true) {
+      execution = await getExecutionStatus(executionId);
+
+      const events = await getExecutionEvents(executionId);
+        
+const realPipeline = [
+  {
+    id: "orchestrator",
+    title: "Orchestrator",
+    subtitle: "Coordinates the AI workflow",
+    status: "completed",
+  },
+  ...[
+    ...new Map(
+      events
+        .filter((event) => event.agent !== "orchestrator")
+        .map((event) => [event.agent, event])
+    ).values(),
+  ].map((event) => ({
+    id: event.agent,
+    title: event.agent.replaceAll("_", " "),
+    subtitle: event.event.replaceAll("_", " "),
+    status: event.status,
+  })),
+];
+
+      setConversations((prev) =>
+        prev.map((conversation) =>
+          conversation.id === conversationId
+            ? {
+                ...conversation,
+                pipeline: realPipeline,
+                eventLogs: events.map((event) => ({
+                  id: event.id,
+                  time: new Date(event.timestamp).toLocaleTimeString(),
+                  event: `${event.agent}: ${event.event} (${event.status})`,
+                })),
+              }
+            : conversation
+        )
       );
 
-      return null;
+      if (["completed", "failed"].includes(execution.status)) {
+        break;
+      }
+
+      await new Promise((resolve) => setTimeout(resolve, 1500));
     }
 
-    const data = await response.json();
+    if (execution.status === "completed" && execution.final_response) {
+      setConversations((prev) =>
+        prev.map((conversation) =>
+          conversation.id === conversationId
+            ? {
+                ...conversation,
+                messages: [
+                  ...conversation.messages,
+                  {
+                    id: crypto.randomUUID(),
+                    sender: "assistant",
+                    text: execution.final_response,
+                  },
+                ],
+                isExecuting: false,
+              }
+            : conversation
+        )
+      );
+    } else {
+      throw new Error(
+        execution.final_response || "AI execution failed."
+      );
+    }
 
-    console.log("BACKEND RESPONSE:", data);
+    // Load the final event list once more.
+    const finalEvents = await getExecutionEvents(executionId);
 
-    return data;
-
+    setConversations((prev) =>
+      prev.map((conversation) =>
+        conversation.id === conversationId
+          ? {
+              ...conversation,
+              eventLogs: finalEvents.map((event) => ({
+                id: event.id,
+                time: new Date(event.timestamp).toLocaleTimeString(),
+                event: `${event.agent}: ${event.event} (${event.status})`,
+              })),
+              isExecuting: false,
+            }
+          : conversation
+      )
+    );
   } catch (error) {
-    console.error("BACKEND CONNECTION ERROR:", error);
-    return null;
+    console.error("EXECUTION TRACKING ERROR:", error);
+
+    setConversations((prev) =>
+      prev.map((conversation) =>
+        conversation.id === conversationId
+          ? {
+              ...conversation,
+              isExecuting: false,
+              eventLogs: [
+                ...conversation.eventLogs,
+                {
+                  id: crypto.randomUUID(),
+                  time: new Date().toLocaleTimeString(),
+                  event: `Execution error: ${error.message}`,
+                },
+              ],
+            }
+          : conversation
+      )
+    );
   }
 };
 
@@ -413,90 +521,69 @@ const sendMessageToBackend = async (conversationId, message) => {
 
 
 const handleSendMessage = async (message) => {
-      if (!message.trim()) return;
+  if (!message.trim()) return;
 
+  try {
+    let conversationId = selectedConversationId;
+    let isNewConversation = conversationId === null;
 
-    // =======================================================
-    // NEW CHAT
-    // =======================================================
+    // Create a real database conversation when starting a new chat.
+    if (isNewConversation) {
+      const created = await createConversation(
+        message.split(" ").slice(0, 5).join(" ")
+      );
 
-    if (selectedConversationId === null) {
+      conversationId = created.id;
+
       const newConversation = {
-        id: crypto.randomUUID(),
-
-        title: message
-          .split(" ")
-          .slice(0, 5)
-          .join(" "),
-
-        messages: [
-          {
-            id: crypto.randomUUID(),
-            sender: "user",
-            text: message,
-          },
-        ],
-
+        id: conversationId,
+        title: created.title,
+        messages: [],
         pipeline: [],
-
         eventLogs: [],
-
-        isExecuting: true,
+        isExecuting: false,
       };
 
-     setConversations((prev) => [
-  newConversation,
-  ...prev,
-]);
-
-setSelectedConversationId(newConversation.id);
-
-const backendResponse = await sendMessageToBackend(
-  newConversation.id,
-  message
-);
-
-if (backendResponse) {
-  startMockExecution(newConversation.id);
-}
-
-return;
+      setConversations((prev) => [newConversation, ...prev]);
+      setSelectedConversationId(conversationId);
     }
 
-
-    // =======================================================
-    // EXISTING CHAT
-    // =======================================================
-
+    // Add the user message to the UI.
     setConversations((prev) =>
-      prev.map((conversation) => {
-        if (conversation.id !== selectedConversationId)
-          return conversation;
-
-        return {
-          ...conversation,
-
-          messages: [
-            ...conversation.messages,
-
-            {
-              id: crypto.randomUUID(),
-              sender: "user",
-              text: message,
-            },
-          ],
-        };
-      })
+      prev.map((conversation) =>
+        conversation.id === conversationId
+          ? {
+              ...conversation,
+              messages: [
+                ...conversation.messages,
+                {
+                  id: crypto.randomUUID(),
+                  sender: "user",
+                  text: message,
+                },
+              ],
+            }
+          : conversation
+      )
     );
 
-const backendResponse = await sendMessageToBackend(
-  selectedConversationId,
-  message
-);
+    // Send the message to the real backend.
+    const response = await sendMessageToBackend(
+      conversationId,
+      message
+    );
 
-if (backendResponse) {
-  startMockExecution(selectedConversationId);
-}  };
+    if (response) {
+  trackExecution(conversationId, response.execution_id);
+}
+  } catch (error) {
+    console.error("CHAT ERROR:", error);
+    alert(error.message || "Unable to start this conversation.");
+  }
+};
+
+
+
 
 
   // =========================================================
