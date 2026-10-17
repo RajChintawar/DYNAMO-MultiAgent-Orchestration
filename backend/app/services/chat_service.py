@@ -12,7 +12,7 @@ from app.services.execution_service import (
     add_execution_event,
 )
 from app.services.dynamo_ai_service import run_dynamo_ai
-
+import json
 
 def process_chat(
     db: Session,
@@ -116,12 +116,20 @@ async def run_execution_background(
             text=report,
         )
 
+       
+
         update_execution_status(
             db,
             execution_id,
             "completed",
             final_response=report,
+            total_tokens=int(result.get("tokens") or 0),
+            latency_ms=float(result.get("latency_ms") or 0.0),
+            confidence=float(result.get("confidence") or 0.0),
+            selected_policy=str(result.get("policy") or ""),
+            agents_used=json.dumps(result.get("agents_used") or []),
         )
+
 
     
     except Exception as exc:

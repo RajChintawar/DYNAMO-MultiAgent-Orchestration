@@ -7,6 +7,7 @@ class ExecutionCreate(BaseModel):
     conversation_id: str
 
 
+
 class ExecutionResponse(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
@@ -16,6 +17,12 @@ class ExecutionResponse(BaseModel):
     started_at: datetime
     completed_at: Optional[datetime] = None
     final_response: Optional[str] = None
+
+    total_tokens: int = 0
+    latency_ms: float = 0.0
+    confidence: float = 0.0
+    selected_policy: Optional[str] = None
+    agents_used: Optional[str] = None
 
 
 class ExecutionEventCreate(BaseModel):

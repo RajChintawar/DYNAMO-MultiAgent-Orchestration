@@ -78,6 +78,9 @@ class SynthesisAgent:
                 "synthesis_tokens": 0,
             }
 
+        max_findings_chars = 10000
+        findings_block = findings_block[:max_findings_chars]
+
         avg_confidence = sum(confidences) / len(confidences) if confidences else 0.0
 
         messages = [

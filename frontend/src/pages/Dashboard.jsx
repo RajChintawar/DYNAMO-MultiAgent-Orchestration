@@ -449,26 +449,37 @@ const realPipeline = [
       await new Promise((resolve) => setTimeout(resolve, 1500));
     }
 
-    if (execution.status === "completed" && execution.final_response) {
-      setConversations((prev) =>
-        prev.map((conversation) =>
-          conversation.id === conversationId
-            ? {
-                ...conversation,
-                messages: [
-                  ...conversation.messages,
-                  {
-                    id: crypto.randomUUID(),
-                    sender: "assistant",
-                    text: execution.final_response,
-                  },
-                ],
-                isExecuting: false,
-              }
-            : conversation
-        )
-      );
-    } else {
+    
+if (execution.status === "completed" && execution.final_response) {
+  setConversations((prev) =>
+    prev.map((conversation) =>
+      conversation.id === conversationId
+        ? {
+            ...conversation,
+            messages: [
+              ...conversation.messages,
+              {
+                id: crypto.randomUUID(),
+                sender: "assistant",
+                text: execution.final_response,
+                metrics: {
+                  totalTokens: execution.total_tokens,
+                  latencyMs: execution.latency_ms,
+                  confidence: execution.confidence,
+                  policy: execution.selected_policy,
+                  agents: execution.agents_used
+                    ? JSON.parse(execution.agents_used)
+                    : [],
+                },
+              },
+            ],
+            isExecuting: false,
+          }
+        : conversation
+    )
+  );
+}
+ else {
       throw new Error(
         execution.final_response || "AI execution failed."
       );

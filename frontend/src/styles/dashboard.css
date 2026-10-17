@@ -227,20 +227,216 @@
 
 /* AI */
 
-.assistantMessage{
 
-    align-self:flex-start;
+/* ==========================================
+   DYNAMO — AI RESPONSE / REPORT DESIGN
+   ========================================== */
 
-    max-width:70%;
-
-    background:#161B22;
-
-    border:1px solid #30363D;
-
-    padding:16px;
-
-    border-radius:10px;
+.assistantMessage {
+  color: #d1d5db;
+  font-size: 14px;
+  line-height: 1.8;
+  overflow-wrap: anywhere;
+  min-width: 0;
 }
+
+.assistantMessage > :first-child {
+  margin-top: 0;
+}
+
+.assistantMessage > :last-child {
+  margin-bottom: 0;
+}
+
+.assistantMessage h1,
+.assistantMessage h2,
+.assistantMessage h3,
+.assistantMessage h4 {
+  color: #f3f4f6;
+  line-height: 1.4;
+  font-weight: 650;
+  letter-spacing: -0.3px;
+}
+
+.assistantMessage h1 {
+  font-size: 25px;
+  margin: 28px 0 14px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #303744;
+}
+
+.assistantMessage h2 {
+  font-size: 20px;
+  margin: 26px 0 12px;
+}
+
+.assistantMessage h3 {
+  font-size: 16px;
+  margin: 20px 0 8px;
+}
+
+.assistantMessage p {
+  margin: 10px 0 16px;
+}
+
+.assistantMessage strong {
+  color: #f9fafb;
+  font-weight: 650;
+}
+
+.assistantMessage a {
+  color: #79aaff;
+  text-decoration: none;
+}
+
+.assistantMessage a:hover {
+  text-decoration: underline;
+}
+
+.assistantMessage ul,
+.assistantMessage ol {
+  padding-left: 24px;
+  margin: 12px 0 20px;
+}
+
+.assistantMessage li {
+  padding-left: 4px;
+  margin: 7px 0;
+}
+
+.assistantMessage li::marker {
+  color: #78a9ff;
+}
+
+.assistantMessage blockquote {
+  margin: 18px 0;
+  padding: 12px 16px;
+  background: #171d27;
+  border-left: 3px solid #639bff;
+  border-radius: 0 8px 8px 0;
+  color: #b8c2d1;
+}
+
+.assistantMessage hr {
+  border: 0;
+  border-top: 1px solid #303744;
+  margin: 24px 0;
+}
+
+/* Tables */
+
+.assistantMessage table {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: auto;
+  border-collapse: collapse;
+  margin: 18px 0 24px;
+  font-size: 13px;
+}
+
+.assistantMessage th,
+.assistantMessage td {
+  padding: 11px 14px;
+  text-align: left;
+  border: 1px solid #303744;
+  min-width: 100px;
+}
+
+.assistantMessage th {
+  background: #202938;
+  color: #f3f4f6;
+  font-weight: 600;
+}
+
+.assistantMessage td {
+  background: #141922;
+}
+
+.assistantMessage tr:nth-child(even) td {
+  background: #191f29;
+}
+
+/* Inline and block code */
+
+.assistantMessage :not(pre) > code {
+  background: #202938;
+  color: #9dc1ff;
+  padding: 3px 6px;
+  border-radius: 5px;
+  font-size: 0.9em;
+}
+
+.assistantMessage pre {
+  max-width: 100%;
+  overflow-x: auto;
+  padding: 16px;
+  margin: 16px 0 22px;
+  border: 1px solid #303744;
+  border-radius: 10px;
+  background: #0b0e14;
+  line-height: 1.65;
+}
+
+.assistantMessage pre code {
+  color: #d6deeb;
+  font-size: 13px;
+}
+
+/* ==========================================
+   EXECUTION METRICS
+   ========================================== */
+
+.responseMetrics {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 24px;
+  padding-top: 16px;
+  border-top: 1px solid #303744;
+}
+
+.responseMetrics span {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 7px 11px;
+  background: #171d27;
+  border: 1px solid #303744;
+  border-radius: 8px;
+  color: #b8c2d1;
+  font-size: 12px;
+  line-height: 1.5;
+  transition: border-color 0.2s ease,
+              background 0.2s ease;
+}
+
+.responseMetrics span:hover {
+  background: #202938;
+  border-color: #4b6284;
+}
+
+/* Small screens */
+
+@media (max-width: 600px) {
+  .assistantMessage h1 {
+    font-size: 22px;
+  }
+
+  .assistantMessage h2 {
+    font-size: 18px;
+  }
+
+  .responseMetrics {
+    gap: 6px;
+  }
+
+  .responseMetrics span {
+    font-size: 11px;
+    padding: 6px 8px;
+  }
+}
+
 
 /* INPUT BOX  */
 

@@ -74,13 +74,33 @@ const ChatWindow = ({ messages, handleSendMessage }) => {
                   : "assistantMessage"
               }
             >
-              {message.sender === "user" ? (
-                message.text
-              ) : (
-                <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                  {formatMarkdown(message.text)}
-                </ReactMarkdown>
-              )}
+              
+{message.sender === "user" ? (
+  message.text
+) : (
+  <>
+    <ReactMarkdown remarkPlugins={[remarkGfm]}>
+      {formatMarkdown(message.text)}
+    </ReactMarkdown>
+
+    {message.metrics && (
+      <div className="responseMetrics">
+        <span>Tokens: {message.metrics.totalTokens ?? 0}</span>
+        <span>
+          Latency: {Number(message.metrics.latencyMs ?? 0).toFixed(0)} ms
+        </span>
+        <span>
+          Confidence: {Number(message.metrics.confidence ?? 0).toFixed(2)}
+        </span>
+        <span>Policy: {message.metrics.policy || "N/A"}</span>
+        <span>
+          Agents: {message.metrics.agents?.length ?? 0}
+        </span>
+      </div>
+    )}
+  </>
+)}
+
             </div>
           ))
         )}

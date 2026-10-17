@@ -33,7 +33,7 @@ import uuid
 from datetime import datetime, timezone
 
 from sqlalchemy import (
-    Column, String, Text, DateTime, ForeignKey, Integer,
+    Column, String, Text, DateTime, ForeignKey, Integer, Float,
 )
 from sqlalchemy.orm import relationship
 
@@ -91,6 +91,11 @@ class Execution(Base):
     started_at = Column(DateTime(timezone=True), default=_now, nullable=False)
     completed_at = Column(DateTime(timezone=True), nullable=True)
     final_response = Column(Text, nullable=True)
+    total_tokens = Column(Integer, nullable=False, default=0)
+    latency_ms = Column(Float, nullable=False, default=0.0)
+    confidence = Column(Float, nullable=False, default=0.0)
+    selected_policy = Column(String(100), nullable=True)
+    agents_used = Column(Text, nullable=True)
 
     conversation = relationship("Conversation", back_populates="executions")
     events = relationship(
